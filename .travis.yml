@@ -1,33 +1,30 @@
-sudo: false
-
-language: java
-
-jdk:
-  - oraclejdk7
-#  - oraclejdk8
-
 before_install:
-  - wget https://dl.dropboxusercontent.com/u/7897865/apache-maven-3.3.9.zip
-  - unzip -qq apache-maven-3.3.9.zip
-  - export M2_HOME=$PWD/apache-maven-3.3.9
-  - export PATH=$M2_HOME/bin:$PATH
-  - "git clone https://github.com/iipc/travis.git target/travis"
-
+- wget https://dl.dropboxusercontent.com/u/7897865/apache-maven-3.3.9.zip
+- unzip -qq apache-maven-3.3.9.zip
+- export M2_HOME=$PWD/apache-maven-3.3.9
+- export PATH=$M2_HOME/bin:$PATH
+- git clone https://github.com/iipc/travis.git target/travis
 before_script:
- - "export JAVA_OPTS=-Xmx1024m"
- - "export MAVEN_OPTS=-Xmx512m"
- - "ulimit -u 2048"
-
-script: 
-  - "target/travis/deploy-if.sh"
-
-# whitelist in the master branch only
+- export JAVA_OPTS=-Xmx1024m
+- export MAVEN_OPTS=-Xmx512m
+- ulimit -u 2048
 branches:
   only:
-    - master
-
+  - master
 env:
   global:
-    - secure: mXBn3NkZ0JtD9y5dbWtyDzTLWaHJJm7WR68MiraYb7fpj7IcKsQBNKJUsB0EO4xEHr8en05o4l9ZNi0IfywesjxT0SZ9R5iWCB1RF3/vz9pi8POyQC4Pw3O1t4pGi/IYC/9XWQvK874wigjB39kCtZ3b1Qio+EzVo97xO8fL8t4=
-    - secure: phhZKVFWTUo789bQ7FvVzfCBjIMw3e8cHazdyNqq+F70sZMxLT2N0j7KLs7WcqSTXBdC+gPVNMKoCey1vSHl1eqH21SETq26GP7KjdAibbTPOgjqP8GK/CiDT1ORXk4FAsYkTbo9L+IxEECexlhabT/I6UXV/JFJE+qhaa8Wsxg=
-
+  - secure: mXBn3NkZ0JtD9y5dbWtyDzTLWaHJJm7WR68MiraYb7fpj7IcKsQBNKJUsB0EO4xEHr8en05o4l9ZNi0IfywesjxT0SZ9R5iWCB1RF3/vz9pi8POyQC4Pw3O1t4pGi/IYC/9XWQvK874wigjB39kCtZ3b1Qio+EzVo97xO8fL8t4=
+  - secure: phhZKVFWTUo789bQ7FvVzfCBjIMw3e8cHazdyNqq+F70sZMxLT2N0j7KLs7WcqSTXBdC+gPVNMKoCey1vSHl1eqH21SETq26GP7KjdAibbTPOgjqP8GK/CiDT1ORXk4FAsYkTbo9L+IxEECexlhabT/I6UXV/JFJE+qhaa8Wsxg=
+jdk:
+- oraclejdk7
+language: java
+notifications:
+  email: false
+  slack:
+    rooms: flakycov:U2MeVOPjdi4up1U793ubeIUZ
+    template:
+    - Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository}@%{branch} by %{author} %{result} in %{duration}
+    - 'dashbot: %{repository_name} %{build_id}'
+script:
+- target/travis/deploy-if.sh
+sudo: false
